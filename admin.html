@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - CYS Store</title>
+<meta http-equiv="Content-Security-Policy" 
+      content="default-src 'self' https:; 
+               script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; 
+               style-src 'self' 'unsafe-inline' https:; 
+               img-src 'self' data: https:;
+               connect-src 'self';
+               frame-src 'none';
+               object-src 'none';">    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Login Screen -->
+        <div class="login-screen" id="loginScreen">
+            <div class="login-box">
+                <div class="login-header">
+                    <h2><i class="fas fa-lock"></i> دخول المشرف</h2>
+                    <p>لوحة تحكم متجر CYS</p>
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="adminUsername"><i class="fas fa-user"></i> اسم المستخدم</label>
+                        <input type="text" id="adminUsername" required value="admin">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adminPassword"><i class="fas fa-key"></i> كلمة المرور</label>
+                        <input type="password" id="adminPassword" required value="admin123">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                    </button>
+                    
+                  
+                </form>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div class="admin-dashboard" id="adminDashboard" style="display: none;">
+            <!-- Sidebar -->
+            <aside class="admin-sidebar">
+                <div class="sidebar-header">
+                    <h2><i class="fas fa-cog"></i> CYS Admin</h2>
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                    </button>
+                </div>
+                
+                <nav class="sidebar-nav">
+                    <a href="#dashboard" class="active" data-tab="dashboard">
+                        <i class="fas fa-tachometer-alt"></i> لوحة التحكم
+                    </a>
+                    <a href="#products" data-tab="products">
+                        <i class="fas fa-box"></i> إدارة المنتجات
+                    </a>
+                    <a href="#orders" data-tab="orders">
+                        <i class="fas fa-shopping-cart"></i> الطلبات
+                        <span class="badge" id="ordersBadge">0</span>
+                    </a>
+                    <a href="#coupons" data-tab="coupons">
+                        <i class="fas fa-tag"></i> إدارة الكوبونات
+                    </a>
+                    <a href="#banner" data-tab="banner">
+                        <i class="fas fa-images"></i> شريط الصور
+                    </a>
+                    <a href="#settings" data-tab="settings">
+                        <i class="fas fa-cogs"></i> الإعدادات
+                    </a>
+                </nav>
+                
+                <div class="sidebar-footer">
+                    <div class="admin-info">
+                        <div class="admin-avatar">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div class="admin-details">
+                            <h4>مشرف النظام</h4>
+                            <small>Admin</small>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="admin-main">
+                <!-- Dashboard Tab -->
+                <div class="tab-content active" id="dashboardTab">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-tachometer-alt"></i> لوحة التحكم</h2>
+                        <p>نظرة عامة على المتجر</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalProducts">0</h3>
+                                <p>المنتجات</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalOrders">0</h3>
+                                <p>الطلبات</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalCoupons">0</h3>
+                                <p>الكوبونات</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalRevenue">0</h3>
+                                <p>إجمالي المبيعات</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-orders">
+                        <h3><i class="fas fa-history"></i> أحدث الطلبات</h3>
+                        <div class="orders-list" id="recentOrders">
+                            <!-- Recent orders will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Tab -->
+                <div class="tab-content" id="productsTab">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-box"></i> إدارة المنتجات</h2>
+                        <p>إضافة وتعديل وحذف المنتجات</p>
+                        <button class="btn btn-primary" id="addProductBtn">
+                            <i class="fas fa-plus"></i> إضافة منتج جديد
+                        </button>
+                    </div>
+                    
+                    <div class="products-list" id="adminProductsList">
+                        <!-- Products will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Orders Tab -->
+                <div class="tab-content" id="ordersTab">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-shopping-cart"></i> إدارة الطلبات</h2>
+                        <p>عرض وتحديث حالة الطلبات</p>
+                    </div>
+                    
+                    <div class="orders-controls">
+                        <select id="orderStatusFilter" class="filter-select">
+                            <option value="all">جميع الطلبات</option>
+                            <option value="new">جديد</option>
+                            <option value="processing">قيد المعالجة</option>
+                            <option value="completed">مكتمل</option>
+                            <option value="cancelled">ملغي</option>
+                        </select>
+                    </div>
+                    
+                    <div class="orders-list" id="adminOrdersList">
+                        <!-- Orders will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Coupons Tab -->
+                <div class="tab-content" id="couponsTab">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-tag"></i> إدارة الكوبونات</h2>
+                        <p>إنشاء وتعديل كوبونات الخصم</p>
+                        <button class="btn btn-primary" id="addCouponBtn">
+                            <i class="fas fa-plus"></i> إضافة كوبون جديد
+                        </button>
+                    </div>
+                    
+                    <div class="coupons-list" id="couponsList">
+                        <!-- Coupons will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Banner Tab -->
+                <div class="tab-content" id="bannerTab">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-images"></i> إدارة شريط الصور</h2>
+                        <p>إدارة صور المنصات في الصفحة الرئيسية</p>
+                        <button class="btn btn-primary" id="addBannerImageBtn">
+                            <i class="fas fa-plus"></i> إضافة صورة جديدة
+                        </button>
+                    </div>
+                    
+                    <div class="banner-manager">
+                        <div class="current-banner">
+                            <h3>شريط الصور الحالي</h3>
+                            <div class="banner-images" id="bannerImages">
+                                <!-- Banner images will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div class="add-banner-form">
+                            <h3>إضافة صورة جديدة</h3>
+                            <form id="bannerForm">
+                                <div class="form-group">
+                                    <label for="bannerTitle">عنوان الصورة</label>
+                                    <input type="text" id="bannerTitle" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bannerImageUrl">رابط الصورة</label>
+                                    <input type="text" id="bannerImageUrl" required 
+                                           placeholder="https://example.com/image.jpg">
+                                    <small>أدخل رابط الصورة مباشرة أو ارفعها على أي خدمة مشاركة صور</small>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> حفظ الصورة
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div class="tab-content" id="settingsTab">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-cogs"></i> إعدادات المتجر</h2>
+                        <p>تعديل إعدادات النظام</p>
+                    </div>
+                    
+                    <div class="settings-form">
+                        <form id="settingsForm">
+                            <div class="form-group">
+                                <label for="storeName">اسم المتجر</label>
+                                <input type="text" id="storeName" value="CYS Store">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="adminPassword">كلمة مرور المشرف</label>
+                                <input type="password" id="newAdminPassword" 
+                                       placeholder="أدخل كلمة مرور جديدة">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="storeCurrency">العملة</label>
+                                <select id="storeCurrency">
+                                    <option value="دينار">دينار اردني</option>
+                                    <option value="دينار">دينار كويتي</option>
+                                    <option value="درهم">درهم إماراتي</option>
+                                    <option value="دولار">دولار أمريكي</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="maintenanceMode"> وضع الصيانة
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> حفظ الإعدادات
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="productModalTitle">إضافة منتج جديد</h3>
+                <button class="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="productForm" class="product-form">
+                <input type="hidden" id="editProductId">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productName">اسم المنتج *</label>
+                        <input type="text" id="productName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productPrice">السعر *</label>
+                        <input type="number" id="productPrice" min="0" step="0.01" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productCategory">الفئة *</label>
+                        <select id="productCategory" required>
+                            <option value="">اختر الفئة</option>
+                            <option value="instagram">انستجرام</option>
+                            <option value="facebook">فيسبوك</option>
+                            <option value="twitter">تويتر</option>
+                            <option value="tiktok">تيك توك</option>
+                            <option value="youtube">يوتيوب</option>
+                            <option value="snapchat">سناب شات</option>
+                            <option value="other">أخرى</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productStock">الكمية المتاحة *</label>
+                        <input type="number" id="productStock" min="0" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productDescription">وصف المنتج</label>
+                    <textarea id="productDescription" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productDetails">تفاصيل المنتج (سطر لكل تفصيل)</label>
+                    <textarea id="productDetails" rows="3" 
+                              placeholder="المتابعين: 10000&#10;المشاركات: 50&#10;عمر الحساب: 6 أشهر"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productImage">رابط صورة المنتج</label>
+                    <input type="text" id="productImage" 
+                           placeholder="https://example.com/image.jpg">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="productFeatured"> منتج مميز
+                    </label>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelProductBtn">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> حفظ المنتج
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Coupon Modal -->
+    <div class="modal-overlay" id="couponModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="couponModalTitle">إضافة كوبون جديد</h3>
+                <button class="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="couponForm" class="coupon-form">
+                <input type="hidden" id="editCouponId">
+                
+                <div class="form-group">
+                    <label for="couponCode">كود الكوبون *</label>
+                    <input type="text" id="couponCode" required style="text-transform: uppercase">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="couponDiscount">نسبة الخصم *</label>
+                        <input type="number" id="couponDiscount" min="1" max="100" required>
+                        <span class="input-suffix">%</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="couponUses">عدد مرات الاستخدام</label>
+                        <input type="number" id="couponUses" min="1" value="100">
+                        <span class="input-suffix">مرة</span>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="couponStartDate">تاريخ البدء</label>
+                        <input type="date" id="couponStartDate">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="couponEndDate">تاريخ الانتهاء</label>
+                        <input type="date" id="couponEndDate">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="couponMinAmount">أقل مبلغ للطلب</label>
+                    <input type="number" id="couponMinAmount" min="0">
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelCouponBtn">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> حفظ الكوبون
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="modal-overlay" id="orderDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>تفاصيل الطلب #<span id="orderId"></span></h3>
+                <button class="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="order-details-content" id="orderDetailsContent">
+                <!-- Order details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

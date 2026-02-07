@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المنتجات - CYS Store</title>
+<meta http-equiv="Content-Security-Policy" 
+      content="default-src 'self' https:; 
+               script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; 
+               style-src 'self' 'unsafe-inline' https:; 
+               img-src 'self' data: https:;
+               connect-src 'self';
+               frame-src 'none';
+               object-src 'none';">    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+   
+
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <h1><span class="logo-c">C</span><span class="logo-y">Y</span><span class="logo-s">S</span></h1>
+                <p class="logo-sub">متجر الحسابات الرقمية</p>
+            </div>
+            
+            <nav class="main-nav">
+                <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="products.html" class="active"><i class="fas fa-store"></i> المنتجات</a>
+                <a href="cart.html" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <a href="admin.html" class="admin-btn"><i class="fas fa-cog"></i> لوحة التحكم</a>
+            </nav>
+            
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="products-page">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">جميع المنتجات</h1>
+                <p class="page-subtitle">اختر من بين مجموعة واسعة من الحسابات المميزة</p>
+            </div>
+
+            <div class="products-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="ابحث عن منتج...">
+                </div>
+                
+                <div class="filter-controls">
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="all">جميع الفئات</option>
+                        <option value="instagram">انستجرام</option>
+                        <option value="facebook">فيسبوك</option>
+                        <option value="twitter">تويتر</option>
+                        <option value="tiktok">تيك توك</option>
+                        <option value="youtube">يوتيوب</option>
+                        <option value="snapchat">سناب شات</option>
+                    </select>
+                    
+                    <select id="sortFilter" class="filter-select">
+                        <option value="newest">الأحدث أولاً</option>
+                        <option value="price-low">السعر: من الأقل للأعلى</option>
+                        <option value="price-high">السعر: من الأعلى للأقل</option>
+                        <option value="name">حسب الاسم</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="products-grid" id="productsContainer">
+                <!-- Products will be loaded here -->
+            </div>
+
+            <div class="no-products" id="noProducts" style="display: none;">
+                <i class="fas fa-box-open"></i>
+                <h3>لا توجد منتجات حالياً</h3>
+                <p>سيتم إضافة منتجات جديدة قريباً</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Purchase Modal -->
+    <div class="modal-overlay" id="purchaseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إكمال عملية الشراء</h3>
+                <button class="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="purchaseForm" class="purchase-form">
+                <input type="hidden" id="productId">
+                
+                <div class="form-group">
+                    <label for="customerName"><i class="fas fa-user"></i> الاسم الكامل *</label>
+                    <input type="text" id="customerName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerPhone"><i class="fas fa-phone"></i> رقم الهاتف *</label>
+                    <input type="tel" id="customerPhone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerEmail"><i class="fas fa-envelope"></i> البريد الإلكتروني *</label>
+                    <input type="email" id="customerEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="instagramUser"><i class="fab fa-instagram"></i> حساب الانستجرام (اختياري)</label>
+                    <input type="text" id="instagramUser" placeholder="@username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="couponCode"><i class="fas fa-tag"></i> كود الخصم</label>
+                    <div class="coupon-input">
+                        <input type="text" id="couponCode" placeholder="أدخل كود الخصم">
+                        <button type="button" id="applyCoupon" class="btn-coupon">تطبيق</button>
+                    </div>
+                    <div class="coupon-feedback" id="couponFeedback"></div>
+                </div>
+                
+                <div class="order-summary">
+                    <div class="summary-item">
+                        <span>السعر الأصلي:</span>
+                        <span id="originalPrice">0 دينار</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>الخصم:</span>
+                        <span id="discountAmount">0 دينار</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>المجموع:</span>
+                        <span id="finalPrice">0 دينار</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-shopping-cart"></i> تأكيد الطلب
+                </button>
+                
+                <div class="form-note">
+                    <i class="fas fa-info-circle"></i>
+                    <small>سيتم التواصل معك خلال 24 ساعة لإكمال العملية</small>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2023 CYS Store. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="mobile-menu-overlay"></div>
+    <nav class="mobile-menu">
+        <div class="mobile-menu-header">
+            <h3>CYS Menu</h3>
+            <button class="close-menu"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="mobile-menu-links">
+            <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+            <a href="products.html" class="active"><i class="fas fa-store"></i> المنتجات</a>
+            <a href="cart.html"><i class="fas fa-shopping-cart"></i> سلة المشتريات</a>
+            <a href="admin.html"><i class="fas fa-cog"></i> لوحة التحكم</a>
+        </div>
+    </nav>
+
+    <script src="js/storage.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/products.js"></script>
+</body>
+</html>
